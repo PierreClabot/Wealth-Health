@@ -1,0 +1,28 @@
+@import "./normalize.css";
+@import "./variables/variables.scss";
+
+// PAGES
+@import "./../pages/home/home.scss";
+
+// COMPONENTS
+@import "./../components/header/header.scss";
+@import "./../components/formEmployee/formEmployee.scss";
+@import "./../components/input/input.scss";
+@import "./../components/calendar/calendar.scss";
+@import "./../components/dropdown/dropdown.scss";
+
+body{
+    min-height: 100vh;
+    background: rgb(241,255,175);
+    background: linear-gradient(180deg, rgba(223,242,137,1) 0%, rgba(255,255,255,1) 100%);
+}
+
+#root{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+*{
+    box-sizing: border-box;
+}

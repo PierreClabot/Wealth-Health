@@ -1,0 +1,14 @@
+.formEmployee{
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    margin: auto;
+    fieldset{
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.formEmployee > div{
+    margin: 0.5rem 0;
+}

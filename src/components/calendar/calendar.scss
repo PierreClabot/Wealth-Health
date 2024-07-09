@@ -1,0 +1,103 @@
+.calendar{
+    position: relative;
+    .calendar-input{
+        position: relative;
+    
+        input[type='text']{
+            padding: 1rem 0.5rem 0.5rem 0.5rem;
+            outline: none;
+            width: 100%;
+            position: relative;
+        }
+    
+        .label{
+            position: absolute;
+            top: 50%;
+            left: 0;
+            translate: 1rem -50%;
+            pointer-events: none;
+        }
+    
+        .icon{
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            translate: 0 -50%;
+            cursor: pointer;
+        }
+    }
+    .calendar-selector{
+        display: none;
+        background-color: #fff;
+        position: absolute;
+        z-index: 1;
+        padding: 0.5rem;
+        .header-calendar{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 90%;
+            margin: auto;
+            .icone{
+                cursor: pointer;
+            }
+        }
+        .table-calendar{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        
+        
+            .case{
+                width: 14%;
+                text-align: center;
+                cursor: pointer;
+            }
+        }
+    }
+    
+    .form-row{
+        position: relative;
+    
+        .input{
+            padding: 1rem 0.5rem 0.5rem 0.5rem;
+            position: relative;
+            align-items: end;
+            outline: none;
+            width: 100%;
+            &:focus+label{
+                animation: focusIn 0.2s forwards;
+            }
+        }
+    
+    
+    
+    }
+
+}
+
+
+
+@keyframes focusIn{
+    0%{
+        top: 50%;
+        translate: 1rem -50%;
+    }
+    100%{
+        top: 5px;
+        translate : 1rem 0;
+        font-size: 0.85rem;
+
+    }
+}
+
+@keyframes focusOut{
+    0%{
+        top: 0;
+        translate : 1rem 0;
+    }
+    100%{
+        top: 50%;
+        translate: 1rem -50%;
+    }
+}

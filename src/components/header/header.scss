@@ -1,0 +1,35 @@
+header{
+    border-bottom: solid 1px black;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    .header-left{
+        img{
+            width: 80px;
+        }
+        h1{
+            font-size: 30px;
+            text-transform: uppercase;
+        }
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .header-right{
+        display: flex;
+        align-items: center;
+        ul{
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            li{
+                text-decoration: none;
+                .header-link{
+                    text-decoration: none;
+                    color: #1d1d1d;
+                }
+            }
+        }
+    }
+}
