@@ -5,7 +5,10 @@ import Calendar from "../calendar/calendar";
 import Dropdown from "../dropdown/dropdown";
 import states from "../../utils/states";
 import departments from "../../utils/departments";
+import Employee from "../../models/employee";
 import { useState } from "react";
+import Api from "../../api/api";
+import { faL } from "@fortawesome/free-solid-svg-icons";
 
 function FormEmployee(){
 
@@ -21,17 +24,28 @@ function FormEmployee(){
         department: ''
       });
 
-    const handleSubmit = (event) =>{
+    const handleSubmit = async (event) =>{
         event.preventDefault();
         console.log(formUser)
+        let res ; 
+        res = Api.insertEmployee(formUser)
+        if(!res){
+            setModale("");
+            return;
+        }
+
     }
 
     const handleValChange = (name,value) =>{
-
-        setFormUser({
+        let objEmployee = {
             ...formUser,
             [name]: value,
-          });
+          }
+
+        const employee = new Employee(objEmployee)
+
+        setFormUser(employee);
+        
         
     }
 
