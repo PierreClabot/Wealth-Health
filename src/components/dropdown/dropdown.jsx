@@ -2,14 +2,18 @@ import { faL } from "@fortawesome/free-solid-svg-icons"
 import { useEffect, useState } from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-function Dropdown({data,label,id,onValChange}){
+function Dropdown({data,label,id,onValChange,error}){
 
     const [visible,setVisible] = useState(false)
     const [arrData,setArrData] = useState(data)
     const [value,setValue] = useState("")
+    const [isUpdate,setIsUpdate] = useState(false)
 
     useEffect(()=>{
-        onValChange(id,value)
+        if(isUpdate){
+            onValChange(id,value)
+        }
+
         if(value === ""){
             setArrData(data)
             return
@@ -31,6 +35,7 @@ function Dropdown({data,label,id,onValChange}){
 
     const handleClickOption = (event) =>{
         setValue(event.target.getAttribute("data-value"))
+        setIsUpdate(true)
         let target = event.target;
         let i = 0;
         while(!target.classList.contains("dropdown") && i<10){
@@ -67,7 +72,7 @@ function Dropdown({data,label,id,onValChange}){
     const handleChange = (event) =>{
         setValue(event.target.value);
         setVisible(true);
-        
+        setIsUpdate(true)
     }
 
 
@@ -89,6 +94,7 @@ function Dropdown({data,label,id,onValChange}){
                     })}
                 </ul>
             </div>
+            {error?<div className="error">{error}</div>:""}
         </div>
     )
 }
