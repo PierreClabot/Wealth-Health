@@ -1,24 +1,29 @@
 .form-row{
     position: relative;
 
-    .input{
-        padding: 1rem 0.5rem 0.5rem 0.5rem;
+    .form-input{
         position: relative;
-        align-items: end;
-        outline: none;
-        width: 100%;
-        &:focus+label{
-            animation: focusIn 0.2s forwards;
+        
+        .input{
+            padding: 1rem 0.5rem 0.5rem 0.5rem;
+            position: relative;
+            align-items: end;
+            outline: none;
+            width: 100%;
+            &:focus+label{
+                animation: focusIn 0.2s forwards;
+            }
+        }
+    
+        .label{
+            position: absolute;
+            top: 50%;
+            left: 0;
+            translate: 1rem -50%;
+            pointer-events: none;
         }
     }
 
-    .label{
-        position: absolute;
-        top: 50%;
-        left: 0;
-        translate: 1rem -50%;
-        pointer-events: none;
-    }
 
 }
 

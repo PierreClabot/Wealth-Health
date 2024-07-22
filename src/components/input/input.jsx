@@ -1,5 +1,5 @@
 import { useState } from "react"
-function Input({onValChange,label,type,id}){
+function Input({onValChange,label,type,id,error}){
 
     const [data,setData] = useState("")
     const handleChange = (event) =>{
@@ -28,8 +28,11 @@ function Input({onValChange,label,type,id}){
 
     return(
         <div className="form-row">
-            <input type={type} className="input" id={id} onChange={handleChange} onBlur={handleBlur} onFocus={handleFocus} placeholder="" value={data}/>
-            <label className="label" htmlFor={id}>{label}</label>
+            <div className="form-input">
+                <input type={type} className="input" id={id} onChange={handleChange} onBlur={handleBlur} onFocus={handleFocus} placeholder="" value={data}/>
+                <label className="label" htmlFor={id}>{label}</label>
+            </div>
+            {error?<div className="error">{error}</div>:""}
         </div>
 
     )

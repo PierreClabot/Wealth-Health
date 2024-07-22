@@ -7,7 +7,9 @@ class Api{
     }
 
     static async insertEmployee(employee){
-        console.log(employee)
+        console.log(!!employee.firstname)
+        if(!employee.firstname || !employee.lastname || !employee.birthday || !employee.startdate || !employee.street || !employee.city || !employee.state || !employee.zipcode ||  !employee.department ) return false
+
         const { data, error } = await supabase
         .from('employees')
         .insert([{
@@ -21,7 +23,7 @@ class Api{
             zipcode     : employee.zipcode,
             department  : employee.department
             }])
-  
+
         if (error) {
             console.error('Error inserting data:', error)
             return false;
