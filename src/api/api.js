@@ -23,13 +23,38 @@ class Api{
             zipcode     : employee.zipcode,
             department  : employee.department
             }])
+        .select()
 
         if (error) {
             console.error('Error inserting data:', error)
             return false;
         } else {
-            return true
+            // console.log("data inserting ",data)
+            return data[0]
         }
+    }
+
+    static async getEmployees(){
+        const {data,error} = await supabase
+        .from("employees")
+        .select("*")
+        .order('firstname', { ascending: true });
+
+        if (error) {
+            console.error('Error get data:', error)
+            return false;
+        } else {
+            return data
+        }
+    }
+
+    static async countEmployees(){
+        const { count, error } = await supabase
+        .from('employees')
+        .select('*', { count: 'exact' })
+
+        console.log("count ",count)
+        return count
     }
 }
 

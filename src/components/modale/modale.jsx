@@ -1,4 +1,3 @@
-import { faL } from "@fortawesome/free-solid-svg-icons"
 import { useEffect, useState } from "react"
 
 import success from "../../assets/success.png"
@@ -10,6 +9,7 @@ function Modale({type,image,title,message,onclose,show}){
     const [icone,setIcone]  = useState()
 
     const getIcone = (type)=>{
+
         switch(type){
             case "success" :
                 return success
@@ -21,11 +21,14 @@ function Modale({type,image,title,message,onclose,show}){
     }
 
     useEffect(()=>{
+        if(image){
+            setIcone(image)
+            return
+        }
         setIcone(getIcone(type))
-    },[type])
+    },[show])
     
     
-
 
     return(
         show?(<div className="container-modale">

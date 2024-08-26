@@ -4,6 +4,11 @@ header{
     justify-content: space-between;
     padding: 1rem;
     .header-left{
+
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        
         img{
             width: 80px;
         }
@@ -11,9 +16,7 @@ header{
             font-size: 30px;
             text-transform: uppercase;
         }
-        display: flex;
-        align-items: center;
-        gap: 1rem;
+       
     }
 
     .header-right{
