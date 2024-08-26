@@ -6,19 +6,19 @@ import Dropdown from "../dropdown/dropdown";
 import states from "../../utils/states";
 import departments from "../../utils/departments";
 import Employee from "../../models/employee";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Api from "../../api/api";
-import Modale from "../modale/modale";
+import Modal  from "modal-wh"
+import { MyContext } from "../../context/context";
 
 function FormEmployee(){
-
+    const {dataContext,setDataContext} = useContext(MyContext)
     const [errorFirstname,setErrorFirstname] = useState("")
     const [errorLastname,setErrorLastname] = useState("")
     const [modale,setModale] = useState(false)
     const [infoModale,setInfoModale]        = useState("");
     const [messageModale,setMessageModale]        = useState("");
     const [titleModale,setTitleModale]        = useState("");
-    const [imageModale,setImageModale]        = useState("");
     const [errorStreet,setErrorStreet] = useState("")
     const [errorCity,setErrorCity] = useState("")
     const [errorState,setErrorState] = useState("")
@@ -50,7 +50,6 @@ function FormEmployee(){
             setTitleModale("Error create employee")
             setMessageModale("The employee could not be created")
             setModale(true);
-            console.log(formUser)
             const user =  Object.keys(formUser);
             user.forEach(name=>{
                 console.log(name+" "+formUser[name])
@@ -59,10 +58,13 @@ function FormEmployee(){
             return;
         }
 
+        console.log("res",res)
         setInfoModale("success")
         setTitleModale("New employee")
         setMessageModale("The employee has been created")
         setModale(true);
+        console.log("dataContext ",dataContext)
+        setDataContext([...dataContext,res])
         return
 
     }
@@ -175,7 +177,7 @@ function FormEmployee(){
 
                 
             </form>
-            <Modale message={messageModale} title={titleModale} type={infoModale} show={modale} onclose={closeModale}/>
+            <Modal message={messageModale} title={titleModale} type={infoModale} show={modale} onclose={closeModale}/>
         </>
         
     )
