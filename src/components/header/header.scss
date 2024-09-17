@@ -13,7 +13,7 @@ header{
             width: 80px;
         }
         h1{
-            font-size: 30px;
+            font-size: 26px;
             text-transform: uppercase;
         }
        
@@ -26,13 +26,36 @@ header{
             display: flex;
             gap: 2rem;
             list-style: none;
+            margin: 0;
+            padding: 0;
             li{
                 text-decoration: none;
                 .header-link{
                     text-decoration: none;
+                    font-size: 14px;
                     color: #1d1d1d;
                 }
             }
         }
     }
 }
+
+@media (max-width: 500px) {
+    header{
+      flex-direction: column;
+      .header-left{
+        flex-direction: column;
+        gap: 0;
+        img{
+            width: 40px;
+        }
+        h1{
+            font-size: 24px;
+        }
+      }
+      .header-right{
+        margin: auto;
+        font-size: 14px;
+      }
+    }
+  }
