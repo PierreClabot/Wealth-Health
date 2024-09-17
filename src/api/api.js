@@ -53,7 +53,6 @@ class Api{
         .from('employees')
         .select('*', { count: 'exact' })
 
-        console.log("count ",count)
         return count
     }
 }

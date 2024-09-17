@@ -9,7 +9,6 @@ function LengthEmployees({onValChange}){
     }
 
     useEffect(()=>{
-        console.log("size",size)
         onValChange(parseInt(size))
     },[size])
 

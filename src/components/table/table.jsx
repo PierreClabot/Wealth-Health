@@ -13,8 +13,18 @@ function Table(){
     const [dataFilterDisplay,setDataFilterDisplay] = useState()
     const [orderFilterAsc,setOrderFilterAsc] = useState("")
     const [filterCategory,setFilterCategory] = useState("")
-    const [search,setSearch] = useState("")
-    const [disabled,setDisabled] = useState(true)
+    const [idEmployee,setIdEmployee] = useState()
+    const [search,setSearch] = useState({
+        firstname   : "",
+        lastname    : "",
+        startdate   : "",
+        department  : "",
+        birthday    : "",
+        street      : "",
+        city        : "",
+        state       : "",
+        zipcode     : ""
+    })
     const [firstName,setFirstName] = useState("First Name")
     const { dataContext, setDataContext } = useContext(MyContext);
     const [page,setPage] = useState(1)
@@ -38,28 +48,33 @@ function Table(){
                 setData(data)
                 setDataFilter(data)
                 setDataFilterDisplay(data)
+
+                setTotalPages(Math.ceil(data.length/pageSize))
+                let arrPages = []
+
+                for(let i = 1;i<=Math.ceil(data.length/pageSize);i++){
+                    arrPages.push(i)
+                }
+                setTotalPages(arrPages)
             })
         }
 
         fetchData()
         getEmployeesInRange(1,pageSize)
-        let objSearch = {
-            firstname : "",
-            lastname    : "",
-            startdate   : "",
-            department  : "",
-            birthday    : "",
-            street      : "",
-            city        : "",
-            state       : "",
-            zipcode     : ""
-        }
-        setSearch(objSearch)
+
+        
+
         
     },[])
 
     useEffect(()=>{
-        getEmployeesInRange(1,pageSize)    
+        console.log("dataFilter ",dataFilter)
+        // getEmployeesInRange(1,pageSize)  
+        
+        if(!dataFilter) return
+        let start = 1+(pageSize*(page-1))
+        let end = pageSize+parseInt((pageSize*(page-1)))
+        getEmployeesInRange(start,end)
     },[dataFilter])
 
     const getEmployeesInRange = (start,end) =>{
@@ -71,14 +86,13 @@ function Table(){
 
     const filterData = (search) =>{
         if(!data) return
-        // const dataFilter = data.filter((employee)=>employee.firstname.toLowerCase().includes(search.toLowerCase()))
 
         let arrPages = []
 
 
         if(orderFilterAsc === true){
-            console.log("A");
-            const dataFilter = data.filter((employee)=>employee[filterCategory].toLowerCase().includes(search.toLowerCase())).sort((a,b) => a[filterCategory].localeCompare(b[filterCategory]));
+
+            const dataFilter = data.filter((employee)=>employee[filterCategory].toLowerCase().includes(search[filterCategory].toLowerCase())).sort((a,b) => a[filterCategory].localeCompare(b[filterCategory]));
             setTotalPages(Math.ceil(dataFilter.length/pageSize))
             for(let i = 1;i<=Math.ceil(dataFilter.length/pageSize);i++){
                 arrPages.push(i)
@@ -92,8 +106,8 @@ function Table(){
         }
 
         else if(orderFilterAsc === false){
-            console.log("B");
-            const dataFilter = data.filter((employee)=>employee[filterCategory].toLowerCase().includes(search.toLowerCase())).sort((a,b) => b[filterCategory].localeCompare(a[filterCategory]));
+
+            const dataFilter = data.filter((employee)=>employee[filterCategory].toLowerCase().includes(search[filterCategory].toLowerCase())).sort((a,b) => b[filterCategory].localeCompare(a[filterCategory]));
             console.log("dataFilter ", dataFilter)
             setTotalPages(Math.ceil(dataFilter.length/pageSize))
             for(let i = 1;i<=Math.ceil(dataFilter.length/pageSize);i++){
@@ -105,7 +119,7 @@ function Table(){
             return;
         }
         // no order 
-        console.log("C");
+
         const dataFilter = data.filter((employee)=>employee[filterCategory].toLowerCase().includes(search[filterCategory].toLowerCase()))
         console.log("dataFilter ",dataFilter)
         setTotalPages(Math.ceil(dataFilter.length/pageSize))
@@ -126,29 +140,34 @@ function Table(){
         
         const order = event.target.getAttribute("order");
         const category = event.target.getAttribute("category");
+        let dataOrder ;
         console.log("category ",category)
 
-        setFilterCategory(category);
+        // setFilterCategory(category);
 
         if(order === "asc"){
-            setOrderFilterAsc(true)
+            console.log("A")
+            //setOrderFilterAsc(true)
+            dataOrder = [...dataFilter].sort((a,b) => a[category].localeCompare(b[category]));
+            console.log("data ",data)
+            console.log("dataOrder ",dataOrder)
+            setDataFilter(dataOrder)
+ 
             return;
         }
-
-        // desc
-        setOrderFilterAsc(false);
+        console.log("B")
+        dataOrder = [...dataFilter].sort((a,b) => b[category].localeCompare(a[category]));
+        setDataFilter(dataOrder)
+        // setOrderFilterAsc(false);
     } 
 
     useEffect(()=>{
-        console.log("search ",search)
-        console.log("filterCategory ",filterCategory)
         if(!filterCategory) return
+
         filterData(search)
     },[orderFilterAsc,filterCategory,search])
 
-    useEffect(()=>{
-       console.log("dataFilter ",dataFilter)
-    },[dataFilter])
+
 
     const handleClickSearch = (event) =>{
         console.log(event)
@@ -195,7 +214,19 @@ function Table(){
         setFilterCategory(category)
     }
 
+    const handleClickEmployee = (idData)=>{
+        if(idEmployee && idEmployee == idData){
+            console.log("B")
+            setIdEmployee();
+            return;
+        }
+        console.log("D")
+        setIdEmployee(idData)
+    }
+
     return(
+        <>
+        
         <div className="table-container">
             <div className="table">
                 <div className="filter">
@@ -203,7 +234,7 @@ function Table(){
                 </div>
                 <div className="header row">
                     <div className="cell">
-                        <div onClick={handleClickSearch}><input type="text" onChange={handleChange} value={search.firstname} placeholder={firstName} disabled={true} data-category="firstname" id="firstname"/> <label htmlFor="firstname"><FontAwesomeIcon icon="fa-solid fa-magnifying-glass" /></label></div>
+                        <div className="input" onClick={handleClickSearch}><input type="text" onChange={handleChange} value={search.firstname} placeholder={firstName} disabled={true} data-category="firstname" id="firstname"/> <label htmlFor="firstname"><FontAwesomeIcon icon="fa-solid fa-magnifying-glass" /></label></div>
                         <div className="filter">
                             <div className="order">
                                 <FontAwesomeIcon icon="fa-solid fa-caret-up" onClick={handleClickOrder} category="firstname" order="desc"/>
@@ -212,7 +243,7 @@ function Table(){
                         </div>
                     </div>
                     <div className="cell">
-                    <div onClick={handleClickSearch}><input type="text" onChange={handleChange} value={search.lastname} placeholder="Last Name" disabled={true} data-category="lastname" id="lastname"/> <label htmlFor="lastname"><FontAwesomeIcon icon="fa-solid fa-magnifying-glass" /></label></div>
+                    <div className="input" onClick={handleClickSearch}><input type="text" onChange={handleChange} value={search.lastname} placeholder="Last Name" disabled={true} data-category="lastname" id="lastname"/> <label htmlFor="lastname"><FontAwesomeIcon icon="fa-solid fa-magnifying-glass" /></label></div>
                         <div className="filter">
                             <div className="order">
                                 <FontAwesomeIcon icon="fa-solid fa-caret-up" onClick={handleClickOrder} category="lastname" order="desc"/>
@@ -220,17 +251,17 @@ function Table(){
                             </div>
                         </div>
                     </div>
-                    <div className="cell">
-                        <div onClick={handleClickSearch}><input type="text" onChange={handleChange} value={search.datestart} placeholder="Start Date" disabled={true} data-category="startdate" id="startdate"/> <label htmlFor="startdate"><FontAwesomeIcon icon="fa-solid fa-magnifying-glass" /></label></div>
+                    {/* <div className="cell">
+                        <div className="input" onClick={handleClickSearch}><input type="text" onChange={handleChange} value={search.startdate} placeholder="Start Date" disabled={true} data-category="startdate" id="startdate"/> <label htmlFor="startdate"><FontAwesomeIcon icon="fa-solid fa-magnifying-glass" /></label></div>
                         <div className="filter">
                             <div className="order">
                                 <FontAwesomeIcon icon="fa-solid fa-caret-up" onClick={handleClickOrder} category="startdate" order="desc"/>
                                 <FontAwesomeIcon icon="fa-solid fa-caret-down" onClick={handleClickOrder} category="startdate" order="asc" />
                             </div>
                         </div>
-                    </div>
-                    <div className="cell">
-                    <div onClick={handleClickSearch}><input type="text" onChange={handleChange} value={search.department} placeholder="Department" disabled={true} data-category="department" id="department"/> <label htmlFor="department"><FontAwesomeIcon icon="fa-solid fa-magnifying-glass" /></label></div>
+                    </div> */}
+                    <div className="cell desktop">
+                    <div className="input" onClick={handleClickSearch}><input type="text" onChange={handleChange} value={search.department} placeholder="Department" disabled={true} data-category="department" id="department"/> <label htmlFor="department"><FontAwesomeIcon icon="fa-solid fa-magnifying-glass" /></label></div>
                         <div className="filter">
                             <div className="order">
                                 <FontAwesomeIcon icon="fa-solid fa-caret-up" onClick={handleClickOrder} category="department" order="desc"/>
@@ -238,8 +269,8 @@ function Table(){
                             </div>
                         </div>
                     </div>
-                    <div className="cell">
-                        <div onClick={handleClickSearch}><input type="text" onChange={handleChange} value={search.birthday} placeholder="Date of Birth" disabled={true} data-category="birthday" id="birthday"/> <label htmlFor="birthday"><FontAwesomeIcon icon="fa-solid fa-magnifying-glass" /></label></div>
+                    {/* <div className="cell">
+                        <div className="input" onClick={handleClickSearch}><input type="text" onChange={handleChange} value={search.birthday} placeholder="Date of Birth" disabled={true} data-category="birthday" id="birthday"/> <label htmlFor="birthday"><FontAwesomeIcon icon="fa-solid fa-magnifying-glass" /></label></div>
                         <div className="filter">
                             <div className="order">
                                 <FontAwesomeIcon icon="fa-solid fa-caret-up" onClick={handleClickOrder} category="birthday" order="desc"/>
@@ -248,7 +279,7 @@ function Table(){
                         </div>
                     </div>
                     <div className="cell">
-                        <div onClick={handleClickSearch}><input type="text" onChange={handleChange} value={search.street} placeholder="Street" disabled={true} data-category="street" id="street"/> <label htmlFor="street"><FontAwesomeIcon icon="fa-solid fa-magnifying-glass" /></label></div>
+                        <div className="input" onClick={handleClickSearch}><input type="text" onChange={handleChange} value={search.street} placeholder="Street" disabled={true} data-category="street" id="street"/> <label htmlFor="street"><FontAwesomeIcon icon="fa-solid fa-magnifying-glass" /></label></div>
                         <div className="filter">
                             <div className="order">
                                 <FontAwesomeIcon icon="fa-solid fa-caret-up" onClick={handleClickOrder} category="street" order="desc"/>
@@ -257,7 +288,7 @@ function Table(){
                         </div>
                     </div>
                     <div className="cell">
-                        <div onClick={handleClickSearch}><input type="text" onChange={handleChange} value={search.city} placeholder="City" disabled={true} data-category="city" id="city"/> <label htmlFor="city"><FontAwesomeIcon icon="fa-solid fa-magnifying-glass" /></label></div>
+                        <div className="input" onClick={handleClickSearch}><input type="text" onChange={handleChange} value={search.city} placeholder="City" disabled={true} data-category="city" id="city"/> <label htmlFor="city"><FontAwesomeIcon icon="fa-solid fa-magnifying-glass" /></label></div>
                         <div className="filter">
                             <div className="order">
                                 <FontAwesomeIcon icon="fa-solid fa-caret-up" onClick={handleClickOrder} category="city" order="desc"/>
@@ -267,7 +298,7 @@ function Table(){
                     </div>
                     <div className="cell">
                     
-                        <div onClick={handleClickSearch}><input type="text" onChange={handleChange} value={search.state} placeholder="State" disabled={true} data-category="state" id="state"/> <label htmlFor="state"><FontAwesomeIcon icon="fa-solid fa-magnifying-glass" /></label></div>
+                        <div className="input" onClick={handleClickSearch}><input type="text" onChange={handleChange} value={search.state} placeholder="State" disabled={true} data-category="state" id="state"/> <label htmlFor="state"><FontAwesomeIcon icon="fa-solid fa-magnifying-glass" /></label></div>
                         <div className="filter">
                             <div className="order">
                                 <FontAwesomeIcon icon="fa-solid fa-caret-up" onClick={handleClickOrder} category="state" order="desc"/>
@@ -276,42 +307,78 @@ function Table(){
                         </div>
                     </div>
                     <div className="cell">
-                        <div onClick={handleClickSearch}><input type="text" onChange={handleChange} value={search.zipcode} placeholder="Zip Code" disabled={true} data-category="zipcode" id="zipcode"/> <label htmlFor="zipcode"><FontAwesomeIcon icon="fa-solid fa-magnifying-glass" /></label></div>
+                        <div className="input" onClick={handleClickSearch}><input type="text" onChange={handleChange} value={search.zipcode} placeholder="Zip Code" disabled={true} data-category="zipcode" id="zipcode"/> <label htmlFor="zipcode"><FontAwesomeIcon icon="fa-solid fa-magnifying-glass" /></label></div>
                         <div className="filter">
                             <div className="order">
                                 <FontAwesomeIcon icon="fa-solid fa-caret-up" onClick={handleClickOrder} category="zipcode" order="desc"/>
                                 <FontAwesomeIcon icon="fa-solid fa-caret-down" onClick={handleClickOrder} category="zipcode" order="asc" />
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="list">
-                {dataFilter && dataFilter.length>0 ? (
+                {dataFilterDisplay && dataFilterDisplay.length>0 ? (
                 dataFilterDisplay.map((item) => (
-                    <div key={item.id} className="row">
-                    <div className="cell">{item.firstname}</div>
-                    <div className="cell">{item.lastname}</div>
-                    <div className="cell">{item.startdate}</div>
-                    <div className="cell">{item.department}</div>
-                    <div className="cell">{item.birthday}</div>
+                    <div key={item.id} className="row-employee">
+                        <div className="row" onClick={()=>{handleClickEmployee(item.id)}}>
+                        <div className="cell">{item.firstname}</div>
+                        <div className="cell">{item.lastname}</div>
+                        {/* <div className="cell">{item.startdate}</div> */}
+                        <div className="cell desktop">{item.department}</div>
+                        </div>
+
+                    <div className={`row details ${item.id==idEmployee? '':'hidden'}`}>
+                        <div className="info">
+                            <div className="cell mobile">
+                                <div className="icone"><FontAwesomeIcon icon="fa-solid fa-tag" style={{color: "#5b7010",}} /></div>
+                                <div className="text">{item.department}</div>
+                            </div>
+                            <div className="cell">
+                                <div className="icone"><FontAwesomeIcon icon="fa-solid fa-calendar-days" style={{color: "#5b7010",}} /></div>
+                                <div className="text">{item.startdate}</div>
+                            </div>
+                            <div className="cell">
+                                <div className="icone"><FontAwesomeIcon icon="fa-solid fa-cake-candles" style={{color: "#5b7010",}} /></div>
+                                <div className="text">{item.birthday}</div>
+                            </div>
+                        </div>
+                        <div className="info">
+                            <div className="cell">
+                                <div className="icone"><FontAwesomeIcon icon="fa-solid fa-house" style={{color: "#5b7010",}} /></div>
+                                <div className="text">{item.street}</div>
+                            </div>
+                            <div className="cell">
+                                <div className="icone"><FontAwesomeIcon icon="fa-solid fa-map-location-dot" style={{color: "#5b7010",}} /></div>
+                                <div className="text">{item.state}</div>
+                            </div>
+                            <div className="cell">
+                                <div className="icone"><FontAwesomeIcon icon="fa-solid fa-location-dot" style={{color: "#5b7010",}} /></div>
+                                <div className="text">{item.zipcode}</div>
+                            </div>
+                        </div>
+
+                    </div>
+                    {/* <div className="cell">{item.birthday}</div>
                     <div className="cell">{item.street}</div>
                     <div className="cell">{item.city}</div>
                     <div className="cell">{item.state}</div>
-                    <div className="cell">{item.zipcode}</div>
+                    <div className="cell">{item.zipcode}</div> */}
                     </div>
                 ))
                 ) : (
                 <div className="no-data">No data available</div>
                 )}
                 </div>
-                <div className="pagination">
-                    {totalPages.map((elem)=>(
-                        <div key={elem} onClick={()=>{handleClickPage(elem)}}>{elem}</div>
-                    ))}
-                </div>
+                
             </div>
         </div>
     
+        <div className="pagination">
+            {totalPages.map((elem)=>(
+                <div key={elem} onClick={()=>{handleClickPage(elem)}}>{elem}</div>
+            ))}
+        </div>
+    </>
     )
 }
 

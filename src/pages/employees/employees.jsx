@@ -13,10 +13,10 @@ function Employees(){
         async function fetchData(){
             const countEmployees = await Api.countEmployees()
             if(countEmployees == dataContext.length){
-                console.log("data non synchro, aucun changement")
+
                 return;
             }
-            console.log("data synchro")
+
             Api.getEmployees()
             .then(employees=>{
                 setDataContext(employees)
@@ -26,9 +26,7 @@ function Employees(){
         fetchData()
     },[])
 
-    useEffect(()=>{
-        console.log(dataContext)
-    },[dataContext])
+
     return(
         <>
              <Header /> 
