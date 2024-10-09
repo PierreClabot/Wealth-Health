@@ -7,7 +7,7 @@ class Api{
     }
 
     static async insertEmployee(employee){
-        console.log(!!employee.firstname)
+
         if(!employee.firstname || !employee.lastname || !employee.birthday || !employee.startdate || !employee.street || !employee.city || !employee.state || !employee.zipcode ||  !employee.department ) return false
 
         const { data, error } = await supabase
@@ -29,7 +29,7 @@ class Api{
             console.error('Error inserting data:', error)
             return false;
         } else {
-            // console.log("data inserting ",data)
+
             return data[0]
         }
     }

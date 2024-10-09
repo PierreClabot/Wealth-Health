@@ -52,18 +52,15 @@ function FormEmployee(){
             setModale(true);
             const user =  Object.keys(formUser);
             user.forEach(name=>{
-                console.log(name+" "+formUser[name])
                 checkForm(name,formUser[name])
             })
             return;
         }
 
-        console.log("res",res)
         setInfoModale("success")
         setTitleModale("New employee")
         setMessageModale("The employee has been created")
         setModale(true);
-        console.log("dataContext ",dataContext)
         setDataContext([...dataContext,res])
         return
 

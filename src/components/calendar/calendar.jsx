@@ -2,7 +2,7 @@ import { faL } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import { useEffect } from 'react';
-function Calendar({id,label,onValChange}){
+function Calendar({id,label,onValChange,val,setErrorForm,errorForm}){
 
     const [dates,setDates] = useState([])
     const [date,setDate] = useState("")
@@ -12,6 +12,12 @@ function Calendar({id,label,onValChange}){
     const [arrMonths,setArrMonths] = useState(["January","February","March","April","May","June","July","August","September","October","November","December"])
     const [error,setError] = useState("")
     const [domCal,setDomCal] = useState("")
+    const [active,setActive] = useState("")
+
+    useEffect(()=>{
+        setDate(val)
+    },[])
+    
 
     useEffect(()=>{
         const getDaysInMonth = (year,month)=>{
@@ -77,6 +83,8 @@ function Calendar({id,label,onValChange}){
     },[calendar])
 
     useEffect(()=>{
+        if(!date) return
+        setActive(true)
         onValChange(id,date)
     },[date])
 
@@ -125,9 +133,11 @@ function Calendar({id,label,onValChange}){
 
         if(!regexDate.test(`${datDay}/${datMonth}/${datYear}`)){
             setError("Le format de la date est incorrect")
+            errorForm(true)
         }
         else{
             setError("")
+            errorForm(false)
         }
 
         domCal.querySelector(".calendar .label").style.display = "block"
@@ -143,9 +153,11 @@ function Calendar({id,label,onValChange}){
         const regexDate = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
         if(!regexDate.test(event.target.value)){
             setError("Le format de la date est incorrect")
+            errorForm(true)
         }
         else{ // date au bon format, on affiche le calendrier de la date saisie
             setError("")
+            errorForm(false)
             let arrDate = event.target.value.split("/")
 
             setDateCal(new Date(arrDate[2],parseInt(arrDate[1])-1,arrDate[0]))
@@ -153,10 +165,7 @@ function Calendar({id,label,onValChange}){
     }
 
     const handleFocus = (event)=>{
-        const parent = event.target.parentNode
-        parent.querySelector(".label").style.display = "block"
-    
-        const label = parent.querySelector(".label").style.animation = "focusIn 0.2s forwards"
+        setActive(true)
     }
 
     const handleBlur = (event)=>{
@@ -164,26 +173,22 @@ function Calendar({id,label,onValChange}){
         const parent = event.target.parentNode
 
         if(date != ""){
+            setActive(true)
             return;
         }
+        setActive(false)
 
-        parent.querySelector(".label").style.animation = "focusOut 0.2s forwards"
     }
 
-    const closeAllCalendars = () => {
-        document.querySelectorAll(".calendar-selector").forEach(dom=>{ // @AREVOIR
-            dom.style.display = "none";
-        })
-    }
 
     return(
         <div className="calendar">
             <div className="calendar-input">
-                <input type="text" value={date} id={id} onChange={handleChange} onBlur={handleBlur} onFocus={handleFocus} />
+                <input type="text" className={`input ${active?'complete':''}`} value={date} id={id} onChange={handleChange} onBlur={handleBlur} onFocus={handleFocus} />
                 <label className="label" htmlFor={id}>{label}</label>
                 <FontAwesomeIcon icon="fa-solid fa-calendar-days" className='icon' onClick={handleClick}/>
             </div>
-            {error ? <div className='error'>{error}</div> : ""}
+            {errorForm ? <div className='error'>{errorForm}</div> : ""}
             <div className="calendar-selector" >
                 <div className="header-calendar">
                     <div className="icone last">
