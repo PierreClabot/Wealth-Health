@@ -67,10 +67,7 @@ function Table(){
         
     },[])
 
-    useEffect(()=>{
-        console.log("dataFilter ",dataFilter)
-        // getEmployeesInRange(1,pageSize)  
-        
+    useEffect(()=>{        
         if(!dataFilter) return
         let start = 1+(pageSize*(page-1))
         let end = pageSize+parseInt((pageSize*(page-1)))
@@ -108,7 +105,6 @@ function Table(){
         else if(orderFilterAsc === false){
 
             const dataFilter = data.filter((employee)=>employee[filterCategory].toLowerCase().includes(search[filterCategory].toLowerCase())).sort((a,b) => b[filterCategory].localeCompare(a[filterCategory]));
-            console.log("dataFilter ", dataFilter)
             setTotalPages(Math.ceil(dataFilter.length/pageSize))
             for(let i = 1;i<=Math.ceil(dataFilter.length/pageSize);i++){
                 arrPages.push(i)
@@ -121,44 +117,38 @@ function Table(){
         // no order 
 
         const dataFilter = data.filter((employee)=>employee[filterCategory].toLowerCase().includes(search[filterCategory].toLowerCase()))
-        console.log("dataFilter ",dataFilter)
+
         setTotalPages(Math.ceil(dataFilter.length/pageSize))
-        console.log("ICI ",)
+
         for(let i = 1;i<=Math.ceil(dataFilter.length/pageSize);i++){
             arrPages.push(i)
         }
-        console.log("arrPages ",arrPages)
-        setTotalPages(arrPages)
 
+        setTotalPages(arrPages)
         setDataFilter(dataFilter)
+
         return;
     }
 
     const handleClickOrder = (event) =>{
 
-        console.log(event);
+
         
         const order = event.target.getAttribute("order");
         const category = event.target.getAttribute("category");
         let dataOrder ;
-        console.log("category ",category)
-
-        // setFilterCategory(category);
 
         if(order === "asc"){
-            console.log("A")
-            //setOrderFilterAsc(true)
+
             dataOrder = [...dataFilter].sort((a,b) => a[category].localeCompare(b[category]));
-            console.log("data ",data)
-            console.log("dataOrder ",dataOrder)
             setDataFilter(dataOrder)
  
             return;
         }
-        console.log("B")
+
         dataOrder = [...dataFilter].sort((a,b) => b[category].localeCompare(a[category]));
         setDataFilter(dataOrder)
-        // setOrderFilterAsc(false);
+
     } 
 
     useEffect(()=>{
@@ -170,7 +160,7 @@ function Table(){
 
 
     const handleClickSearch = (event) =>{
-        console.log(event)
+
         if(!event.target.querySelector("input")) return
 
         event.target.querySelector("input").disabled = false;
@@ -205,7 +195,6 @@ function Table(){
     const handleChange = (event) =>{
 
         let category = event.target.dataset.category
-        console.log(category)
 
         setSearch({
             ...search,
@@ -216,11 +205,10 @@ function Table(){
 
     const handleClickEmployee = (idData)=>{
         if(idEmployee && idEmployee == idData){
-            console.log("B")
             setIdEmployee();
             return;
         }
-        console.log("D")
+        
         setIdEmployee(idData)
     }
 

@@ -4,7 +4,6 @@ function LengthEmployees({onValChange}){
 
     const [size,setSize] = useState(50)
     const handleChange = (event)=>{
-        console.log(event);
         setSize(event.target.value)
     }
 

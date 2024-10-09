@@ -1,0 +1,13 @@
+.formEmployee{
+    .form-row, .dropdown, .calendar{
+        margin: 20px 0;
+    }
+}
+.btn-stepper{
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    button{
+        max-width: 100px;
+    }
+}

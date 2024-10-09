@@ -1,7 +1,6 @@
 
 .table-container {
     width: 100%;
-    // overflow-x: auto; 
     padding-bottom: 10px;
 
 
@@ -10,8 +9,6 @@
     .table {
         margin: auto;
         max-width: 800px;
-        // border-collapse: collapse; 
-        // overflow-x: auto;
         padding-bottom: 10px;
 
         &::-webkit-scrollbar {
@@ -83,7 +80,6 @@
                   border: none;
 
 
-                  // min-width: 150px;
                   input{
                     margin-right: 5px;
                     width: 100%;

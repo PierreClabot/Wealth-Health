@@ -1,14 +1,17 @@
-import { faL } from "@fortawesome/free-solid-svg-icons"
 import { useEffect, useState } from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-function Dropdown({data,label,id,onValChange,error}){
+function Dropdown({data,label,id,onValChange,error,val}){
 
     const [visible,setVisible] = useState(false)
     const [arrData,setArrData] = useState(data)
     const [value,setValue] = useState("")
     const [isUpdate,setIsUpdate] = useState(false)
+    const [active,setActive] = useState(false)
 
+    useEffect(()=>{
+        setValue(val)
+    },[])
     useEffect(()=>{
         if(isUpdate){
             onValChange(id,value)
@@ -18,6 +21,7 @@ function Dropdown({data,label,id,onValChange,error}){
             setArrData(data)
             return
         }
+        setActive(true)
         let arrDataFilter = arrData.filter((elem)=>{
             return elem.name.toLowerCase().includes(value.toLowerCase())
         })
@@ -52,6 +56,7 @@ function Dropdown({data,label,id,onValChange,error}){
 
     const handleFocus = (event) =>{
         setVisible(true)
+        setActive(true)
         const parent = event.target.parentNode
         parent.querySelector(".label").style.display = "block"
         parent.querySelector(".label").style.animation = "focusIn 0.2s forwards"
@@ -63,9 +68,10 @@ function Dropdown({data,label,id,onValChange,error}){
         const parent = event.target.parentNode
 
         if(value != ""){
+            setActive(true)
             return;
         }
-
+        setActive(false)
         parent.querySelector(".label").style.animation = "focusOut 0.2s forwards"
     }
 
@@ -83,7 +89,7 @@ function Dropdown({data,label,id,onValChange,error}){
     return(
         <div className="dropdown">
             <div className="input">
-                <input type="text" id={id} onFocus={handleFocus} onBlur={handleBlur} onChange={handleChange} value={value}/>
+                <input type="text" className={`input ${active?'complete':''}`} id={id} onFocus={handleFocus} onBlur={handleBlur} onChange={handleChange} value={value}/>
                 <label className="label" htmlFor={id}>{label}</label>
                 <FontAwesomeIcon className={`icone ${visible?"open":""}`} onClick={handleClick} icon="fa-solid fa-chevron-down" />
             </div>

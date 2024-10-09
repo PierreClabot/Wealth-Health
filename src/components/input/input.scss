@@ -10,7 +10,8 @@
             align-items: end;
             outline: none;
             width: 100%;
-            &:focus+label{
+
+            &.complete+label{
                 animation: focusIn 0.2s forwards;
             }
         }
